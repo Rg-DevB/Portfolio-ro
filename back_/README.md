@@ -217,17 +217,6 @@ php artisan make:filament-user
 
 ---
 
-## 📸 Project Preview
-
-> ⚠️ Replace the images below with your own screenshots.
-
-<p align="center">
-  <img src="screenshots/projects.png" width="400" />
-  <img src="screenshots/profile.png" width="400" />
-</p>
-
----
-
 ## 🔒 Security
 
 * API routes protected with `auth:sanctum`
@@ -283,9 +272,3 @@ chore: configure CORS for React frontend
 ```
 
 ---
-
----
-
-## 📄 License
-
-Personal project – free for inspiration
