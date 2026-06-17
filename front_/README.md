@@ -1,95 +1,145 @@
-## 🚀 Next.js Frontend Portfolio
-A modern frontend built with Next.js  (App Router) and TypeScript, migrated from a classic React project to a more professional, scalable, and high‑performance architecture.
+# Portfolio - Next.js + Prisma + MySQL
 
-🛠️ Tech Stack
-Next.js  14 (App Router)
+A modern portfolio built with Next.js 14, Prisma ORM, and MySQL. All content is managed through a MySQL database and fetched statically at build time for optimal performance on Vercel.
 
-TypeScript
+## Tech Stack
 
-Tailwind CSS
+- **Frontend**: Next.js 14 (App Router)
+- **Database ORM**: Prisma
+- **Database**: MySQL
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
+- **Deployment**: Vercel
 
-React
+## Getting Started
 
-Animations & visual effects (Particles, UI animations)
+### Prerequisites
 
-Modular and maintainable architecture
+- Node.js 18+ 
+- MySQL database
+- npm or yarn
 
-## 📁 Project Structure
+### Installation
 
-```txt
-src/
- ├─ app/
- │  ├─ layout.tsx
- │  ├─ page.tsx
- │  └─ globals.css
- ├─ components/
- │  ├─ effects/
- │  ├─ layout/
- │  └─ ui/
- ├─ hooks/
- ├─ context/
- └─ lib/
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd front_
 ```
-## ✨ Features
-🎨 Modern and responsive UI
 
-🌙 Light / Dark mode
+2. Install dependencies:
+```bash
+npm install
+```
 
-🌍 Multilingual support
+3. Set up your environment variables:
+```bash
+cp .env.example .env
+```
 
-🎥 Advanced animations (client-side only)
+Edit `.env` and add your MySQL connection string:
+```
+DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE_NAME"
+```
 
-⚡ SEO & performance optimization
+4. Generate Prisma client:
+```bash
+npm run db:generate
+```
 
-🧩 Backend‑ready architecture (API‑friendly)
+5. Push the schema to your database:
+```bash
+npm run db:push
+```
 
-## 🚦 Requirements
+6. Seed your database (optional - add your own data):
+```bash
+# You can use Prisma Studio or create seed scripts
+npm run db:studio
+```
 
-Node.js  ≥ 18
-
-npm or yarn
-
-## 🧠 Technical Decisions
-
-Canvas and particle animations are loaded client‑side only (ssr: false) to prevent hydration errors.
-
-Clear separation between UI, logic, and context, ensuring maintainability and scalability.
-
-Fully compatible with a Laravel backend / REST API, making the project ready for future full‑stack integration.
-
-## ▶️ Getting Started
-
-First, run the development server:
-
+7. Run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see your portfolio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run db:generate` - Generate Prisma client
+- `npm run db:push` - Push Prisma schema to database
+- `npm run db:studio` - Open Prisma Studio
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+The portfolio uses the following models:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Profile**: Personal information (name, title, description, contact info)
+- **Skill**: Technical skills with levels and categories
+- **Project**: Portfolio projects with categories and technologies
+- **Category**: Project categories
+- **Technology**: Technologies used in projects
+- **Experience**: Work experience
+- **Education**: Educational background
+- **Social**: Social media links
+- **Contact**: Contact form submissions
+- **Setting**: Site settings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment on Vercel
 
-## Deploy on Vercel
+1. Push your code to GitHub/GitLab/Bitbucket
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Connect your repository to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Add the `DATABASE_URL` environment variable in Vercel:
+   - Go to Project Settings → Environment Variables
+   - Add `DATABASE_URL` with your MySQL connection string
+   - For production databases, consider using a service like PlanetScale, Railway, or AWS RDS
+
+4. Deploy!
+
+Vercel will automatically:
+- Install dependencies
+- Generate the Prisma client
+- Build the Next.js application with static data
+
+## Data Management
+
+### Using Prisma Studio
+```bash
+npm run db:studio
+```
+
+### Programmatic Updates
+You can update data directly in your database using any MySQL client, or create admin APIs/routes.
+
+## Static Generation
+
+All portfolio data is fetched at build time using `getStaticProps` equivalent in Next.js App Router. This means:
+
+- ✅ Fast page loads (pre-rendered HTML)
+- ✅ SEO-friendly
+- ✅ No database queries at runtime
+- ⚠️ Need to rebuild to show new data
+
+To update content in production, trigger a new deployment via Vercel's webhook or dashboard.
+
+## Customization
+
+### Translations
+All text is in English by default. Edit `src/translations.ts` to customize strings.
+
+### Styling
+Modify `src/app/globals.css` for global styles.
+
+### Components
+Individual sections are in `src/components/`.
+
+## License
+
+MIT

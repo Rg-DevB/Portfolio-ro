@@ -1,67 +1,84 @@
 export interface ProfileData {
   id?: number;
-  full_name: string;
+  fullName: string;
   title: string;
-  description: string;
-  location: string;
-  email: string;
-  phone: string;
-  cv_url?: string;
-  avatar_url?: string;
-  bio?: string;
+  description?: string | null;
+  location?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  cvUrl?: string | null;
+  photo?: string | null;
+  socialLinks?: any | null;
 }
 
 export interface Skill {
   id?: number;
   name: string;
   level: number;
-  type: string;
+  type?: string | null;
+  icon?: string | null;
+  order?: number;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export interface Technology {
+  id: number;
+  name: string;
+  icon?: string | null;
+  type?: string | null;
 }
 
 export interface Project {
   id: number;
+  name: string;
   title: string;
+  slug: string;
   description: string;
-  technologies: (string | { id?: number; name: string })[] | string;
-  image?: string;
-  thumbnail?: string;
-  demo_url?: string;
-  github_url?: string;
-  featured?: boolean | number;
-  category?: string | { id?: number; name: string };
-  categories?: { id?: number; name: string }[];
+  thumbnail?: string | null;
+  demoUrl?: string | null;
+  githubUrl?: string | null;
+  featured: boolean;
+  status: string;
+  publishedAt?: Date | null;
+  date?: Date | null;
+  order?: number;
+  categories?: Category[];
+  technologies?: Technology[];
 }
 
 export interface Experience {
   id: number;
+  name: string;
   company: string;
-  position?: string;
-  role?: string;
-  location: string;
-  start_date: string;
-  end_date: string;
+  role: string;
+  description?: string | null;
+  startDate: Date;
+  endDate?: Date | null;
   current: boolean;
-  description: string;
-  achievements?: string[];
+  location?: string | null;
 }
 
 export interface Education {
   id: number;
-  institution?: string;
-  school?: string;
+  school: string;
   degree: string;
-  field: string;
-  location?: string;
-  start_date: string;
-  end_date: string;
-  description: string;
-  achievements?: string[];
+  field?: string | null;
+  startDate: Date;
+  endDate?: Date | null;
+  description?: string | null;
 }
 
 export interface Social {
   id: number;
   platform: string;
   url: string;
+  icon?: string | null;
+  order?: number;
 }
 
 export interface PricingPlan {

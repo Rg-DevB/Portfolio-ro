@@ -1,7 +1,6 @@
 "use client"
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import { usePortfolioData } from '../hooks/usePortfolioData';
 import {
     ProfileData,
     Skill,
@@ -34,13 +33,66 @@ export const usePortfolio = () => {
 
 interface PortfolioProviderProps {
     children: ReactNode;
+    initialData?: {
+        profile: ProfileData | null;
+        skills: Skill[];
+        projects: Project[];
+        experience: Experience[];
+        education: Education[];
+        socials: Social[];
+    };
 }
 
-export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({ children }) => {
-    const portfolioData = usePortfolioData();
+export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({ 
+    children, 
+    initialData 
+}) => {
+    // If initial data is provided (from server), use it directly
+    // Otherwise, we'll rely on SWR or other client-side fetching
+    const [data, setData] = React.useState(initialData || {
+        profile: null,
+        skills: [],
+        projects: [],
+        experience: [],
+        education: [],
+        socials: []
+    });
+    
+    const [isLoading, setIsLoading] = React.useState(!initialData);
+    const [error, setError] = React.useState<string | null>(null);
+
+    // Only fetch if no initial data was provided
+    React.useEffect(() => {
+        if (initialData) {
+            setIsLoading(false);
+            return;
+        }
+
+        // Fallback to client-side fetching if needed
+        // This can be removed if you always pass initialData from server
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                const response = await fetch('/api/portfolio');
+                if (!response.ok) throw new Error('Failed to fetch portfolio data');
+                const portfolioData = await response.json();
+                setData(portfolioData);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Unknown error');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [initialData]);
 
     return (
-        <PortfolioContext.Provider value={portfolioData}>
+        <PortfolioContext.Provider value={{
+            ...data,
+            isLoading,
+            error
+        }}>
             {children}
         </PortfolioContext.Provider>
     );

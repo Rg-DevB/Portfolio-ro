@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          Int       @id @default(autoincrement())
+  fullName    String    @map("full_name")
+  title       String
+  description String?
+  photo       String?   @map("photo")
+  email       String?
+  phone       String?
+  location    String?
+  cvUrl       String?   @map("cv_url")
+  socialLinks Json?     @map("social_links")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("profils")
+}
+
+model Skill {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String
+  icon      String?
+  level     Int      @default(0)
+  type      String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("skills")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  userId      Int      @map("user_id")
+  title       String
+  slug        String   @unique
+  description String
+  thumbnail   String?
+  demoUrl     String?  @map("demo_url")
+  githubUrl   String?  @map("github_url")
+  featured    Boolean  @default(false)
+  status      String   @default("draft")
+  publishedAt DateTime? @map("published_at")
+  date        DateTime?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  categories       Category[]       @relation("CategoryProject")
+  projectTechs     ProjectTech[]
+  technologies     Technology[]     @relation("ProjectTechnology")
+
+  @@map("projects")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  projects Project[] @relation("CategoryProject")
+
+  @@map("categories")
+}
+
+model Technology {
+  id        Int      @id @default(autoincrement())
+  name      String
+  icon      String?
+  type      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  projects Project[] @relation("ProjectTechnology")
+
+  @@map("technologies")
+}
+
+model Experience {
+  id          Int      @id @default(autoincrement())
+  name        String
+  userId      Int      @map("user_id")
+  company     String
+  role        String
+  description String?
+  startDate   DateTime @map("start_date")
+  endDate     DateTime? @map("end_date")
+  current     Boolean  @default(false)
+  location    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("experiences")
+}
+
+model Education {
+  id          Int      @id @default(autoincrement())
+  school      String
+  degree      String
+  field       String?
+  startDate   DateTime @map("start_date")
+  endDate     DateTime? @map("end_date")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("education")
+}
+
+model Social {
+  id        Int      @id @default(autoincrement())
+  platform  String
+  url       String
+  icon      String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("socials")
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("contacts")
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+model ProjectTech {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  technologyId  Int      @map("technology_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology  Technology  @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, technologyId])
+  @@map("project_technology")
+}
+
+model CategoryProject {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  project  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, categoryId])
+  @@map("category_project")
+}
