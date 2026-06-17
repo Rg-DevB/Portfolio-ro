@@ -12,7 +12,19 @@ import Experience from "@/src/components/Experience"
 import Contact from "@/src/components/Contact"
 import Footer from "@/src/components/Footer"
 
-export default function ClientPage() {
+interface ClientPageProps {
+  initialData?: {
+    profile: any | null;
+    skills: any[];
+    projects: any[];
+    experiences: any[];
+    education: any[];
+    socials: any[];
+    error: string | null;
+  };
+}
+
+export default function ClientPage({ initialData }: ClientPageProps) {
   const {
     profile,
     skills,
